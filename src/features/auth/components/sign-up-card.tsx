@@ -181,6 +181,16 @@ const SignUp = () => {
           Sign Up with Github
         </Button>
       </CardContent>
+      <div className='px-7'>
+        <DottedSeperator />
+      </div>
+
+      <CardContent className='p-7 flex items-center justify-center'>
+        Already have an account?
+        <Link className='text-blue-700' href={"/sign-in"}>
+            <span>&nbsp; Sign In</span>
+        </Link>
+      </CardContent>
     </Card>
   )
 }
