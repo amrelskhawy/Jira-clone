@@ -1,13 +1,11 @@
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import { Input } from "@/components/ui/input";
 
 export default function Home() {
   return (
-    <div>
-      <h1>Hello world</h1>
-      <Button 
-      size={'sm'}
-      variant={'destructive'}>Click Me</Button>
+    <div className="flex gap-4 flex-wrap">
+      Hello World
+
     </div>
   )
 }
