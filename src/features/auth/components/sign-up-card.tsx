@@ -4,18 +4,51 @@ import {
   Card,
   CardContent,
   CardTitle,
-  CardHeader,
   CardDescription,
-  CardFooter
+  CardHeader,
 } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
 import { FcGoogle } from "react-icons/fc"
 import { FaGithub } from "react-icons/fa"
 import React from 'react'
+import { z } from "zod"
+import { useForm } from 'react-hook-form'
+import { Input } from '@/components/ui/input'
+import { zodResolver } from "@hookform/resolvers/zod"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage
+} from "@/components/ui/form"
 import Link from 'next/link'
 
+const formSchema = z.object({
+  name: z.string().trim().min(1, "Required"),
+  email: z.string().trim().min(1, "Required").email(),
+  password: z.string().min(8, "Minimum 8 Charachters"),
+  confirm_password: z.string().min(8, "Minimum 8 Charachters")
+}).refine((data) => data.password === data.confirm_password, {
+  message: "Passwords must match",
+  path: ["confirm_password"], // Specifies the path of the error
+});
 
-const SignUpCard = () => {
+
+const SignUp = () => {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirm_password: "",
+    }
+  })
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    console.log({ values })
+  }
+
   return (
     <Card className='w-full h-full md:h-[487px] border-none shadow-none'>
       <CardHeader className='flex items-center justify-center text-center p-7'>
@@ -35,48 +68,93 @@ const SignUpCard = () => {
         <DottedSeperator />
       </div>
       <CardContent className='p-7'>
-        <form className='space-y-4'>
-          <Input
-            required
-            type='text'
-            onChange={() => { }}
-            value={""}
-            placeholder='Enter your name'
-            disabled={false}
-          />
-          <Input
-            required
-            type='email'
-            onChange={() => { }}
-            value={""}
-            placeholder='Enter your email address'
-            disabled={false}
-          />
-          <Input
-            required
-            type='password'
-            onChange={() => { }}
-            value={""}
-            placeholder='Enter your password'
-            disabled={false}
-            min={8}
-            max={256}
-          />
-           <Input
-            required
-            type='password'
-            onChange={() => { }}
-            value={""}
-            placeholder='Confirm your password'
-            disabled={false}
-            min={8}
-            max={256}
-          />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+            <FormField
+              name='name'
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
 
-          <Button className='w-full'>
-            Sign Up
-          </Button>
-        </form>
+                    <Input
+                      {...field}
+                      type='name'
+                      placeholder='Enter your name'
+                      disabled={false}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+
+            />
+            <FormField
+              name='email'
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+
+                    <Input
+                      {...field}
+                      type='email'
+                      placeholder='Enter your email address'
+                      disabled={false}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+
+            />
+
+
+            <FormField
+              name='password'
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type='password'
+                      placeholder='Enter your password'
+                      disabled={false}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+
+            />
+
+            <FormField
+              name='confirm_password'
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type='password'
+                      placeholder='Confirm your password'
+                      disabled={false}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+
+            />
+
+
+
+            <Button type='submit' disabled={false} size={"lg"} className='w-full'>
+              Sign Up
+            </Button>
+          </form>
+        </Form>
       </CardContent>
 
       <div className='px-7'>
@@ -107,4 +185,4 @@ const SignUpCard = () => {
   )
 }
 
-export default SignUpCard
+export default SignUp
