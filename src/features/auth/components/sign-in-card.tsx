@@ -21,28 +21,27 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import Link from 'next/link'
-
-const formSchema = z.object({
-  email: z.string().trim().min(1, "Required").email(),
-  password: z.string().min(8, "Minimum 8 Charachters")
-})
+import { loginSchema } from '../schemas'
+import { useLogin } from '../api/use-login'
 
 
 const SignInCard = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
     }
   })
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log({values})
-  }
+  const { mutate } = useLogin()
 
+  const onSubmit = (values: z.infer<typeof loginSchema>) => {
+    mutate({ json: values })
+  }
+  
   return (
-    <Card className='w-full h-full md:h-[487px] border-none shadow-none'>
+    <Card className='w-full h-full md:w-[487px] border-none shadow-none'>
       <CardHeader className='flex items-center justify-center text-center p-7'>
         <CardTitle className='text-2xl'>Welcome Back</CardTitle>
       </CardHeader>
@@ -124,7 +123,7 @@ const SignInCard = () => {
           <FaGithub className='mr-2 size-5' />
           Login with Github
         </Button>
-      </CardContent> 
+      </CardContent>
       <div className='px-7'>
         <DottedSeperator />
       </div>
@@ -132,7 +131,7 @@ const SignInCard = () => {
       <CardContent className='p-7 flex items-center justify-center'>
         Don&apos;t have an account?
         <Link className='text-blue-700' href={"/sign-up"}>
-            <span>&nbsp; Sign Up</span>
+          <span>&nbsp; Sign Up</span>
         </Link>
       </CardContent>
     </Card>
