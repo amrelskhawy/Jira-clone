@@ -22,21 +22,13 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import Link from 'next/link'
+import { registerSchema } from '../schemas'
 
-const formSchema = z.object({
-  name: z.string().trim().min(1, "Required"),
-  email: z.string().trim().min(1, "Required").email(),
-  password: z.string().min(8, "Minimum 8 Charachters"),
-  confirm_password: z.string().min(8, "Minimum 8 Charachters")
-}).refine((data) => data.password === data.confirm_password, {
-  message: "Passwords must match",
-  path: ["confirm_password"], // Specifies the path of the error
-});
 
 
 const SignUp = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -45,12 +37,12 @@ const SignUp = () => {
     }
   })
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: z.infer<typeof registerSchema>) => {
     console.log({ values })
   }
 
   return (
-    <Card className='w-full h-full md:h-[487px] border-none shadow-none'>
+    <Card className='w-full h-full md:w-[487px] border-none shadow-none'>
       <CardHeader className='flex items-center justify-center text-center p-7'>
         <CardTitle className='text-2xl'>Sign Up</CardTitle>
         <CardDescription>
