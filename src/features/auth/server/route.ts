@@ -10,6 +10,12 @@ export const app = new Hono()
         console.log({ email, password })
         return c.json({ success: { email, password } })
     })
-    .post("/register", zValidator("json", registerSchema ))
+    .post("/register", zValidator("json", registerSchema ), async (c: any) => {
+        // Destruct the Form Data
+        const { name, email, password, confirm_password } = c.req.valid("json")
+        console.log({ name, email, password, confirm_password })
+        return c.json({ success: { name, email, password, confirm_password } })
+    } )
+
 
 export default app

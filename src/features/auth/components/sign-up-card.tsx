@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/form"
 import Link from 'next/link'
 import { registerSchema } from '../schemas'
+import { useRegister } from '../api/use-register'
 
 
 
@@ -37,8 +38,10 @@ const SignUp = () => {
     }
   })
 
+  const { mutate } = useRegister()
+
   const onSubmit = (values: z.infer<typeof registerSchema>) => {
-    console.log({ values })
+    mutate({ json: values })
   }
 
   return (
